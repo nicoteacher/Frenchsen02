@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🇫🇷 法式點餐特訓班</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Nunito:wght@600;800&family=Pacifico&display=swap');
+        
+        body {
+            font-family: 'Nunito', 'Noto Sans TC', sans-serif;
+            background-color: #fff1f2; /* Light pinkish background for food theme */
+            background-image: radial-gradient(#ffe4e6 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        .french-text {
+            font-family: 'Nunito', sans-serif;
+        }
+        
+        .menu-font {
+            font-family: 'Pacifico', cursive;
+        }
+
+        .flag-border-top {
+            border-top: 6px solid #0055A4;
+        }
+        .flag-border-bottom {
+            border-bottom: 6px solid #EF4135;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-5xl overflow-hidden border-x-4 border-white flag-border-top flag-border-bottom relative">
+        
+        <!-- Decorative Background Icon -->
+        <div class="absolute top-4 right-4 text-9xl text-gray-50 opacity-5 pointer-events-none">
+            <i class="fas fa-utensils"></i>
+        </div>
+
+        <div class="p-6 md:p-10">
+            <div class="text-center mb-10">
+                <span class="inline-block py-1 px-3 rounded-full bg-red-100 text-red-600 text-sm font-bold tracking-wider mb-2">BISTRO FRANÇAIS</span>
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-2 menu-font">Bon Appétit !</h1>
+                <p class="text-gray-500">選擇你的身份、語氣與美食，練習最道地的點餐法。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-8 items-start">
+                
+                <!-- 1. Subject (3 cols) -->
+                <div class="md:col-span-3 bg-blue-50 p-5 rounded-2xl border-2 border-blue-100 hover:border-blue-300 transition-all shadow-sm group">
+                    <label class="block text-xs font-bold text-blue-800 mb-2 uppercase tracking-widest">1. 誰在點餐 (Sujet)</label>
+                    <div class="relative">
+                        <select id="subjectSelect" onchange="updateSentence()" class="w-full p-3 bg-white rounded-xl border border-blue-200 text-lg french-text focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer">
+                            <option value="Je">Je (我)</option>
+                            <option value="Tu">Tu (你)</option>
+                            <option value="Il">Il (他)</option>
+                            <option value="Elle">Elle (她)</option>
+                            <option value="On">On (我們)</option>
+                            <option value="Nous">Nous (我們)</option>
+                            <option value="Vous">Vous (您/你們)</option>
+                            <option value="Ils">Ils (他們)</option>
+                            <option value="Elles">Elles (她們)</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-blue-500">
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Phrase Structure (4 cols) -->
+                <div class="md:col-span-4 bg-purple-50 p-5 rounded-2xl border-2 border-purple-100 hover:border-purple-300 transition-all shadow-sm">
+                    <label class="block text-xs font-bold text-purple-800 mb-2 uppercase tracking-widest">2. 點餐語氣 (Phrase)</label>
+                    <div class="relative">
+                        <select id="structureSelect" onchange="handleStructureChange()" class="w-full p-3 bg-white rounded-xl border border-purple-200 text-lg french-text focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none cursor-pointer">
+                            <option value="voudrais">Je voudrais... (最有禮貌 ⭐⭐⭐⭐⭐)</option>
+                            <option value="vais_prendre">Je vais prendre... (標準/將要拿 ⭐⭐⭐)</option>
+                            <option value="prends">Je prends... (直接/我拿 ⭐⭐⭐)</option>
+                            <option value="ce_sera">Ce sera... (最道地/這將會是 ⭐⭐⭐⭐)</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-purple-500">
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
+                    <p id="structureHint" class="text-xs text-purple-600 mt-2 font-medium">💡 使用條件式，非常有禮貌。</p>
+                </div>
+
+                <!-- 3. Food (5 cols) -->
+                <div class="md:col-span-5 bg-orange-50 p-5 rounded-2xl border-2 border-orange-100 hover:border-orange-300 transition-all shadow-sm relative">
+                    <label class="block text-xs font-bold text-orange-800 mb-2 uppercase tracking-widest">3. 美食選單 (Menu)</label>
+                    <div class="relative">
+                        <select id="foodSelect" onchange="updateSentence()" class="w-full p-3 bg-white rounded-xl border border-orange-200 text-lg french-text focus:outline-none focus:ring-2 focus:ring-orange-500 appearance-none cursor-pointer pr-10">
+                            <!-- Options populated by JS -->
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-orange-500">
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
+                    <button onclick="randomizeFood()" class="mt-3 text-xs bg-white text-orange-600 px-3 py-1.5 rounded-lg border border-orange-200 hover:bg-orange-100 transition shadow-sm w-full font-bold">
+                        <i class="fas fa-dice mr-1"></i> 幫我隨機選一道菜
+                    </button>
+                </div>
+            </div>
+
+            <!-- Result Display -->
+            <div class="bg-gray-800 text-white rounded-3xl p-8 md:p-12 text-center shadow-xl relative overflow-hidden group">
+                <!-- French flag accent -->
+                <div class="absolute top-0 left-0 h-full w-1.5 bg-blue-600"></div>
+                <div class="absolute top-0 left-1.5 h-full w-1.5 bg-white"></div>
+                <div class="absolute top-0 left-3 h-full w-1.5 bg-red-600"></div>
+
+                <p class="text-xs text-gray-400 mb-4 font-bold tracking-[0.2em] uppercase">Votre Commande (您的訂單)</p>
+                
+                <div id="sentenceDisplay" class="text-3xl md:text-5xl font-bold mb-4 french-text break-words leading-tight min-h-[4rem] text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">
+                    Je voudrais la baguette, s'il vous plaît.
+                </div>
+                
+                <p id="translationDisplay" class="text-lg text-gray-400 font-light min-h-[2rem]">
+                    我想要法國麵包，麻煩了。
+                </p>
+
+                <!-- Interactive Buttons -->
+                <div class="flex justify-center gap-4 mt-8">
+                    <button onclick="speakSentence()" class="bg-blue-600 hover:bg-blue-500 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg transform transition hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-blue-300 group-hover:animate-pulse">
+                        <i class="fas fa-volume-up text-2xl"></i>
+                    </button>
+                </div>
+                <p class="text-xs text-gray-500 mt-2">聽發音</p>
+            </div>
+            
+            <!-- Conjugation Cheat Sheet -->
+            <div id="conjugationTable" class="mt-8 transition-opacity duration-500">
+                <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3 text-center">當前動詞變化表</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-center text-gray-600 bg-white rounded-lg border border-gray-200">
+                        <thead class="bg-gray-50 text-gray-800 font-bold uppercase text-xs">
+                            <tr>
+                                <th class="px-2 py-2">Je</th>
+                                <th class="px-2 py-2">Tu</th>
+                                <th class="px-2 py-2">Il/Elle/On</th>
+                                <th class="px-2 py-2">Nous</th>
+                                <th class="px-2 py-2">Vous</th>
+                                <th class="px-2 py-2">Ils/Elles</th>
+                            </tr>
+                        </thead>
+                        <tbody id="conjugationRow">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Food Data
+        const foodList = [
+            { fr: "la baguette", zh: "法國麵包 (長棍)", emoji: "🥖" },
+            { fr: "le croissant", zh: "可頌", emoji: "🥐" },
+            { fr: "le riz", zh: "米飯", emoji: "🍚" },
+            { fr: "le pain", zh: "麵包 (泛指)", emoji: "🍞" },
+            { fr: "les pâtes", zh: "義大利麵/麵條", emoji: "🍝" },
+            { fr: "le sandwich", zh: "三明治", emoji: "🥪" },
+            { fr: "la pizza", zh: "披薩", emoji: "🍕" },
+            { fr: "le beurre", zh: "奶油", emoji: "🧈" },
+            { fr: "le poulet", zh: "雞肉", emoji: "🍗" },
+            { fr: "le bœuf", zh: "牛肉", emoji: "🥩" },
+            { fr: "le porc", zh: "豬肉", emoji: "🥓" },
+            { fr: "le canard", zh: "鴨肉", emoji: "🦆" },
+            { fr: "le poisson", zh: "魚", emoji: "🐟" },
+            { fr: "le saumon", zh: "鮭魚", emoji: "🐟" },
+            { fr: "les crevettes", zh: "蝦子", emoji: "🍤" },
+            { fr: "le jambon", zh: "火腿", emoji: "🍖" },
+            { fr: "l'œuf", zh: "蛋", emoji: "🥚" },
+            { fr: "le steak", zh: "牛排", emoji: "🥩" },
+            { fr: "la pomme", zh: "蘋果", emoji: "🍎" },
+            { fr: "la banane", zh: "香蕉", emoji: "🍌" },
+            { fr: "l'orange", zh: "柳橙", emoji: "🍊" },
+            { fr: "le citron", zh: "檸檬", emoji: "🍋" },
+            { fr: "la fraise", zh: "草莓", emoji: "🍓" },
+            { fr: "les raisins", zh: "葡萄", emoji: "🍇" },
+            { fr: "la tomate", zh: "番茄", emoji: "🍅" },
+            { fr: "la pomme de terre", zh: "馬鈴薯", emoji: "🥔" },
+            { fr: "la carotte", zh: "紅蘿蔔", emoji: "🥕" },
+            { fr: "l'oignon", zh: "洋蔥", emoji: "🧅" },
+            { fr: "l'ail", zh: "大蒜", emoji: "🧄" },
+            { fr: "la salade", zh: "生菜/沙拉", emoji: "🥗" },
+            { fr: "le champignon", zh: "蘑菇", emoji: "🍄" },
+            { fr: "le fromage", zh: "起司", emoji: "🧀" },
+            { fr: "le lait", zh: "牛奶", emoji: "🥛" },
+            { fr: "le yaourt", zh: "優格", emoji: "🥣" },
+            { fr: "le gâteau", zh: "蛋糕", emoji: "🍰" },
+            { fr: "le chocolat", zh: "巧克力", emoji: "🍫" },
+            { fr: "la glace", zh: "冰淇淋", emoji: "🍨" },
+            { fr: "le sucre", zh: "糖", emoji: "🍬" },
+            { fr: "le miel", zh: "蜂蜜", emoji: "🍯" },
+            { fr: "le macaron", zh: "馬卡龍", emoji: "🍘" },
+            { fr: "la tarte", zh: "塔/派", emoji: "🥧" },
+            { fr: "l'eau", zh: "水", emoji: "💧" },
+            { fr: "le café", zh: "咖啡", emoji: "☕" },
+            { fr: "le thé", zh: "茶", emoji: "🍵" },
+            { fr: "le jus", zh: "果汁", emoji: "🧃" },
+            { fr: "le vin", zh: "葡萄酒", emoji: "🍷" },
+            { fr: "la bière", zh: "啤酒", emoji: "🍺" },
+            { fr: "le champagne", zh: "香檳", emoji: "🥂" },
+            { fr: "le coca", zh: "可樂", emoji: "🥤" },
+            { fr: "le chocolat chaud", zh: "熱巧克力", emoji: "☕" }
+        ];
+
+        // Conjugation Logic
+        const verbs = {
+            // Style 1: Je voudrais (Vouloir - Conditionnel)
+            'voudrais': {
+                base: "vouloir",
+                forms: {
+                    'Je': 'voudrais', 'Tu': 'voudrais', 'Il': 'voudrait', 'Elle': 'voudrait', 'On': 'voudrait',
+                    'Nous': 'voudrions', 'Vous': 'voudriez', 'Ils': 'voudraient', 'Elles': 'voudraient'
+                },
+                zhPattern: "{subject} 想要 {food}",
+                hint: "💡 這是最保險、最有禮貌的點餐方式，適用於任何場合。"
+            },
+            // Style 2: Je vais prendre (Aller + Prendre - Futur Proche)
+            'vais_prendre': {
+                base: "aller prendre",
+                forms: {
+                    'Je': 'vais prendre', 'Tu': 'vas prendre', 'Il': 'va prendre', 'Elle': 'va prendre', 'On': 'va prendre',
+                    'Nous': 'allons prendre', 'Vous': 'allez prendre', 'Ils': 'vont prendre', 'Elles': 'vont prendre'
+                },
+                zhPattern: "{subject} 將要點/拿 {food}",
+                hint: "💡 表示你已經決定好要點什麼了，語氣很標準。"
+            },
+            // Style 3: Je prends (Prendre - Présent)
+            'prends': {
+                base: "prendre",
+                forms: {
+                    'Je': 'prends', 'Tu': 'prends', 'Il': 'prend', 'Elle': 'prend', 'On': 'prend',
+                    'Nous': 'prenons', 'Vous': 'prenez', 'Ils': 'prennent', 'Elles': 'prennent'
+                },
+                zhPattern: "{subject} 拿/點 {food}",
+                hint: "💡 簡單直接，在輕鬆的餐廳或麵包店很常用。"
+            },
+            // Style 4: Ce sera (Être - Futur simple) - FIXED SUBJECT
+            'ce_sera': {
+                base: "ce sera",
+                isFixed: true, // Special flag
+                fixedSubject: "Ce",
+                fixedVerb: "sera",
+                forms: {
+                    'Je': 'sera', 'Tu': 'sera', 'Il': 'sera', 'Nous': 'sera', 'Vous': 'sera', 'Ils': 'sera' // Dummy
+                },
+                zhPattern: "這將會是 {food} (我點 {food})",
+                hint: "⚠️ 注意：這是一個固定用法，主詞永遠是 'Ce' (這)，表示「我的餐點將會是...」。"
+            }
+        };
+
+        const subjectZhMap = {
+            'Je': '我', 'Tu': '你', 'Il': '他', 'Elle': '她', 
+            'On': '我們', 'Nous': '我們', 'Vous': '您/你們', 
+            'Ils': '他們', 'Elles': '她們', 'Ce': ''
+        };
+
+        // DOM Elements
+        const subjectSelect = document.getElementById('subjectSelect');
+        const structureSelect = document.getElementById('structureSelect');
+        const foodSelect = document.getElementById('foodSelect');
+        const sentenceDisplay = document.getElementById('sentenceDisplay');
+        const translationDisplay = document.getElementById('translationDisplay');
+        const structureHint = document.getElementById('structureHint');
+        const conjugationRow = document.getElementById('conjugationRow');
+        const conjugationTable = document.getElementById('conjugationTable');
+
+        function init() {
+            // Populate Food List
+            foodSelect.innerHTML = '';
+            foodList.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.fr; // e.g. "la baguette"
+                option.text = `${item.emoji} ${item.fr} (${item.zh})`;
+                option.dataset.zh = item.zh;
+                foodSelect.appendChild(option);
+            });
+            
+            handleStructureChange();
+        }
+
+        function handleStructureChange() {
+            const styleKey = structureSelect.value;
+            const styleData = verbs[styleKey];
+            
+            // Update Hint
+            structureHint.innerText = styleData.hint;
+
+            // Handle Fixed Subject Logic (Ce sera)
+            if (styleData.isFixed) {
+                subjectSelect.disabled = true;
+                subjectSelect.classList.add('opacity-50', 'bg-gray-100');
+                // Store previous selection if needed, but for now just visually lock
+            } else {
+                subjectSelect.disabled = false;
+                subjectSelect.classList.remove('opacity-50', 'bg-gray-100');
+            }
+
+            updateConjugationTable(styleKey);
+            updateSentence();
+        }
+
+        function updateConjugationTable(styleKey) {
+            const styleData = verbs[styleKey];
+            conjugationRow.innerHTML = '';
+
+            if (styleData.isFixed) {
+                conjugationTable.style.opacity = '0.3'; // Dim table for fixed phrases
+                return;
+            } else {
+                conjugationTable.style.opacity = '1';
+            }
+
+            const forms = styleData.forms;
+            const order = ['Je', 'Tu', 'Il', 'Nous', 'Vous', 'Ils'];
+            
+            let html = '<tr class="bg-white border-b hover:bg-yellow-50 transition">';
+            order.forEach(sub => {
+                html += `<td class="px-2 py-3 text-blue-600 font-medium">${forms[sub]}</td>`;
+            });
+            html += '</tr>';
+            conjugationRow.innerHTML = html;
+        }
+
+        function updateSentence() {
+            const styleKey = structureSelect.value;
+            const styleData = verbs[styleKey];
+            let subject = subjectSelect.value;
+            
+            // Get Food
+            const foodOption = foodSelect.options[foodSelect.selectedIndex];
+            const foodFr = foodOption.value;
+            const foodZh = foodOption.dataset.zh;
+
+            let finalSentence = "";
+            let finalTrans = "";
+
+            if (styleData.isFixed) {
+                // Special Case: Ce sera
+                finalSentence = `Pour moi, ce sera ${foodFr}, s'il vous plaît.`;
+                finalTrans = `對我來說，我點${foodZh}，麻煩了。`; // More natural translation for "Pour moi, ce sera"
+            } else {
+                // Normal Conjugation
+                let verbForm = styleData.forms[subject];
+                
+                // Handle Elision (Je + Vowel)
+                // "Je" + "ai..." or "Je" + "allons" (wait, Je is Vais)
+                // Check if verb starts with vowel?
+                // In our current list: "voudrais" (cons), "vais" (cons), "prends" (cons).
+                // So no J' needed for these specific 3 verbs. 
+                // But let's be safe if we add "aimer" later.
+                
+                finalSentence = `${subject} ${verbForm} ${foodFr}, s'il vous plaît.`;
+                
+                // Construct Translation
+                let subZh = subjectZhMap[subject];
+                finalTrans = styleData.zhPattern
+                    .replace('{subject}', subZh)
+                    .replace('{food}', foodZh) + "，麻煩了。";
+            }
+
+            sentenceDisplay.innerText = finalSentence;
+            translationDisplay.innerText = finalTrans;
+        }
+
+        function randomizeFood() {
+            const count = foodSelect.options.length;
+            const randomIdx = Math.floor(Math.random() * count);
+            foodSelect.selectedIndex = randomIdx;
+            updateSentence();
+        }
+
+        function speakSentence() {
+            const text = sentenceDisplay.innerText;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'fr-FR';
+            utterance.rate = 0.85; // Slightly slower for clarity
+            
+            const voices = window.speechSynthesis.getVoices();
+            const frVoice = voices.find(voice => voice.lang.includes('fr'));
+            if (frVoice) utterance.voice = frVoice;
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        window.onload = init;
+
+    </script>
+</body>
+</html>
